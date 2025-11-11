@@ -1,0 +1,1 @@
+{{-- Admin Comic Approvals Page --}}

@@ -26,8 +26,9 @@ return new class extends Migration
             $table->longText('description');
             $table->string('thumbnail_path');
             $table->string('status');
+            $table->integer('views_count')->default(0);
             $table->foreignId('approved_by')->constrained('users')->onDelete('set null');
-            $table->timestamp('apptoved_at');
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
 
