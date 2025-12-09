@@ -7,6 +7,10 @@ Berikut **README.md** siap-pakai untuk repository GitHub proyek **Komiku**. Saya
 **Komiku** adalah platform webcomic berbasis Laravel yang dirancang untuk memberikan pengalaman membaca komik digital yang nyaman sekaligus menjadi wadah terstruktur bagi kreator lokal untuk mengunggah dan mempublikasikan karya mereka. Fokus: aksesibilitas pembaca, manajemen konten kreator, dan dashboard admin untuk kurasi serta analitik ringan. 
 
 ![WhatsApp Image 2025-12-09 at 14 01 41_1bb7f5e8](https://github.com/user-attachments/assets/6c95545d-bcdb-4a16-8c1d-782fa2bd3372)
+![WhatsApp Image 2025-12-09 at 14 01 20_8eedf819](https://github.com/user-attachments/assets/4f1bbf25-8630-4d69-90b8-3334e75c08f4)
+![WhatsApp Image 2025-12-09 at 14 10 51_108aff39](https://github.com/user-attachments/assets/9c5d8d1f-2230-47b2-ae3c-655909270190)
+![WhatsApp Image 2025-12-09 at 14 20 02_1adeaccc](https://github.com/user-attachments/assets/e634fc38-d33f-4c80-9044-14a53a0bbae1)
+
 
 ---
 
