@@ -37,21 +37,25 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('chapters', function(Blueprint $table){
-            $table->id();
-            $table->foreignId('comic_id')->constrained('comic')->onDelete('set null');
-            $table->string('title');
-            $table->integer('order_no');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('chapters')) {
+            Schema::create('chapters', function(Blueprint $table){
+                $table->id();
+                $table->foreignId('comic_id')->constrained('comic')->onDelete('set null');
+                $table->string('title');
+                $table->integer('order_no');
+                $table->timestamps();
+            });
+        }
 
-        Schema::create('chapter_images', function(Blueprint $table){
-            $table->id();
-            $table->foreignId('chapter_id')->constrained('chapters')->onDelete('set null');
-            $table->string('image_path');
-            $table->integer('order_no');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('chapter_images')) {
+            Schema::create('chapter_images', function(Blueprint $table){
+                $table->id();
+                $table->foreignId('chapter_id')->constrained('chapters')->onDelete('set null');
+                $table->string('image_path');
+                $table->integer('order_no');
+                $table->timestamps();
+            });
+        }
 
         Schema::create('rating', function(Blueprint $table){
             $table->id();

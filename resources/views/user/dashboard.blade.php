@@ -1,23 +1,25 @@
-<!-- index.html -->
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KOMIKU — Landing</title>
-  @vite(['resources/css/dashboard.css'])
-  @vite(['resources/css/header.css'])
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body>
-  @include('component.header')
+@extends('user.layout.user-app')
 
+@push('styles')
+@vite(['resources/css/dashboard.css'])
+@vite(['resources/css/header.css'])
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+@endpush
+
+@section('content')
+  @php
+    $topComics = $topComics ?? collect();
+    $newReleasedComics = $newReleasedComics ?? collect();
+    $forYouComics = $forYouComics ?? collect();
+  @endphp
   <main class="container">
     <section class="hero">
       <div class="hero-left">
         <h1>Find Your Story World in Komiku!</h1>
         <p>Find thousands of digital comics from talented creators in one place. Start reading or publish your story today.</p>
-        <a class="cta" href="#">Get Started</a>
+        @guest
+        <a class="cta" href="{{ route('login') }}">Get Started</a>
+        @endguest
       </div>
       <img class="hero-img" src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png" alt="hero" />
     </section>
@@ -27,10 +29,7 @@
       <div class="section-header">
         <h3>Top Comic</h3>
         <div class="chips">
-          <div class="chip">Genre</div>
-          <div class="chip">Action</div>
-          <div class="chip">Romance</div>
-          <div class="chip">Comedy</div>
+          <button class="chip genre-btn" data-genre="all">View All</button>
         </div>
       </div>
 
@@ -38,35 +37,102 @@
         <div class="arrow left" data-target="row1"></div>
         <div class="arrow right" data-target="row1"></div>
         <div id="row1" class="row">
-          <!-- repeated cards -->
-          <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png" alt="cover"><div class="title">Judul Comic</div><div class="meta">Author • 12k</div></div>
-          <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png" alt="cover"><div class="title">Judul Comic</div><div class="meta">Author • 8k</div></div>
-          <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png" alt="cover"><div class="title">Judul Comic</div><div class="meta">Author • 5k</div></div>
-          <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png" alt="cover"><div class="title">Judul Comic</div><div class="meta">Author • 2k</div></div>
-          <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png" alt="cover"><div class="title">Judul Comic</div><div class="meta">Author • 1k</div></div>
+          @forelse($topComics as $comic)
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+              <a href="{{ route('comic.detail', $comic->id) }}">
+                <img src="{{ $comic->thumbnail_path ? asset($comic->thumbnail_path) : asset('images/comic-placeholder.jpg') }}"
+                     alt="{{ $comic->title }}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                  <h4 class="title font-semibold text-gray-900 mb-2 line-clamp-2">{{ $comic->title }}</h4>
+                  <div class="meta text-sm text-gray-600">
+                    <div>By {{ $comic->user->name }}</div>
+                    <div class="flex items-center justify-between mt-1">
+                      <span>⭐ {{ number_format($comic->average_rating, 1) }}</span>
+                      <span>{{ number_format($comic->total_views) }} views</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          @empty
+            <p class="no-comics-msg">Komik belum tersedia</p>
+          @endforelse
         </div>
       </div>
+
     </section>
 
     <!-- New Released -->
     <section class="section">
-      <div class="section-header"><h3>New Released</h3><div class="chips"><div class="chip">View All</div></div></div>
-      <div class="row">
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
+      <div class="section-header">
+        <h3>New Released</h3>
+        <div class="chips">
+          <div class="chip">View All</div>
+        </div>
+      </div>
+
+      <div class="carousel">
+        <div class="arrow left" data-target="row2"></div>
+        <div class="arrow right" data-target="row2"></div>
+        <div id="row2" class="row">
+          @forelse($newReleasedComics as $comic)
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+              <a href="{{ route('comic.detail', $comic->id) }}">
+                <img src="{{ $comic->thumbnail_path ? asset($comic->thumbnail_path) : asset('images/comic-placeholder.jpg') }}"
+                     alt="{{ $comic->title }}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                  <h4 class="title font-semibold text-gray-900 mb-2 line-clamp-2">{{ $comic->title }}</h4>
+                  <div class="meta text-sm text-gray-600">
+                    <div>By {{ $comic->user->name }}</div>
+                    <div class="flex items-center justify-between mt-1">
+                      <span>⭐ {{ number_format($comic->average_rating, 1) }}</span>
+                      <span>{{ number_format($comic->total_views) }} views</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          @empty
+            <p class="no-comics-msg">Komik belum tersedia</p>
+          @endforelse
+        </div>
       </div>
     </section>
 
     <!-- For You -->
     <section class="section">
-      <div class="section-header"><h3>For You</h3><div class="chips"><div class="chip">Based on your reading</div></div></div>
-      <div class="row">
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
-        <div class="card"><img src="/mnt/data/c09fc619-4e44-4e72-9ca5-da0c5297f8db.png"><div class="title">Judul Comic</div></div>
+      <div class="section-header">
+        <h3>For You</h3>
+        <div class="chips">
+          <div class="chip">Based on your reading</div>
+        </div>
+      </div>
+
+      <div class="carousel">
+        <div class="arrow left" data-target="row3"></div>
+        <div class="arrow right" data-target="row3"></div>
+        <div id="row3" class="row">
+          @forelse($forYouComics as $comic)
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+              <a href="{{ route('comic.detail', $comic->id) }}">
+                <img src="{{ $comic->thumbnail_path ? asset($comic->thumbnail_path) : asset('images/comic-placeholder.jpg') }}"
+                     alt="{{ $comic->title }}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                  <h4 class="title font-semibold text-gray-900 mb-2 line-clamp-2">{{ $comic->title }}</h4>
+                  <div class="meta text-sm text-gray-600">
+                    <div>By {{ $comic->user->name }}</div>
+                    <div class="flex items-center justify-between mt-1">
+                      <span>⭐ {{ number_format($comic->average_rating, 1) }}</span>
+                      <span>{{ number_format($comic->total_views) }} views</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          @empty
+            <p class="no-comics-msg">Komik belum tersedia</p>
+          @endforelse
+        </div>
       </div>
     </section>
 
@@ -74,18 +140,12 @@
     <section class="section">
       <p style="color:var(--muted);">All kinds of stories. All the feels. Just for you</p>
       <div class="tags">
-        <div class="tag">Horror</div>
-        <div class="tag">Drama</div>
-        <div class="tag">Action</div>
-        <div class="tag">Comedy</div>
-        <div class="tag">Fantasy</div>
-        <div class="tag">Romance</div>
-        <div class="tag">Mystery</div>
-        <div class="tag">Local</div>
+        <button class="chip genre-btn" data-genre="all">All</button>
+        @foreach($genres as $genre)
+          <div class="tag">{{ $genre->name }}</div>
+        @endforeach
       </div>
     </section>
-
-    @include('component.footer')
   </main>
 
   <script>
@@ -99,5 +159,4 @@
       })
     })
   </script>
-</body>
-</html>
+@endsection

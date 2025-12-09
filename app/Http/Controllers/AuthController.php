@@ -27,22 +27,20 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // 2. Buat user langsung (skip OTP untuk simplicity)
-        $user = User::create([
+        // 2. Simpan data registrasi ke session
+        $registrationData = [
             'name' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', // default role
-            'status' => 'active', // set default status
-            'birth_date' => now()->toDateString(), // set default birth_date
-            'email_verified_at' => now(), // set verified
-        ]);
+            'role' => 'user',
+            'status' => 'active',
+            'birth_date' => now()->toDateString(),
+        ];
 
-        // 3. Login user otomatis
-        Auth::login($user);
+        $request->session()->put('registration_data', $registrationData);
 
-        // 4. Redirect ke dashboard
-        return redirect()->route('/user/dashboard');
+        // 3. Redirect ke kirim OTP
+        return redirect()->route('otp.send.init');
     }
 
     // Menampilkan halaman login
@@ -66,31 +64,42 @@ class AuthController extends Controller
         // Coba untuk login
         if (Auth::attempt($credentials, $remember)) {
 
-            // Simpan objek user ke variabel lokal sebelum melakukan aksi logout
+            // Simpan objek user ke variabel lokal
             $user = Auth::user();
 
-            // KRUSIAL: Cek status verifikasi email
-            if ($user->email_verified_at === null) {
-
-                // Simpan ID user sebelum logout
-                $userId = $user->id; // <<< AMBIL ID DI SINI
-
-                Auth::logout(); // Logout user yang belum terverifikasi
-
-                // Redirect ke halaman verifikasi menggunakan ID yang sudah disimpan
-                return redirect()->route('otp.send', $userId)->with('error', 'Akun Anda belum terverifikasi. Silakan cek email Anda untuk kode OTP.');
-            }
-
-            // Jika sudah diverifikasi, lanjutkan
+            // Jika sudah diverifikasi, lanjutkan (skip OTP check untuk sementara)
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+
+            // Redirect based on role
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'creator') {
+                return redirect()->route('creator.dashboard');
+            } else {
+                return redirect()->intended('dashboard');
+            }
         }
+
+
 
         // Jika login gagal
         return back()->withErrors([
             'email' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
         ])->onlyInput('email');
     }
+
+    public function loginPost(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (auth()->attempt($credentials, $request->remember)) {
+            return redirect()->intended('/dashboard');
+        }
+
+        // Jika login gagal
+        return redirect()->back()->with('error', 'Email atau password salah!');
+    }
+
 
     // Logout
     public function logout(Request $request)

@@ -2,21 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -24,31 +19,53 @@ class User extends Authenticatable
         'role',
         'status',
         'birth_date',
-        'email_verified_at',
-        'otp_code',
+        'bio',
+        'avatar',
+        'otp',
         'otp_expires_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
+        'otp',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'birth_date' => 'date',
+        'otp_expires_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    // Relationships
+    public function followedComics()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsToMany(Comic::class, 'comic_follows');
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function purchasedComics()
+    {
+        return $this->belongsToMany(Comic::class, 'purchases')
+            ->wherePivot('status', 'success');
+    }
+
+    // Helper methods
+    public function hasPurchased(Comic $comic): bool
+    {
+        return $this->purchases()
+            ->where('comic_id', $comic->id)
+            ->where('status', 'success')
+            ->exists();
+    }
+
+    public function canAccessComic(Comic $comic): bool
+    {
+        return !$comic->isPaid() || $this->hasPurchased($comic) || $comic->user_id === $this->id;
     }
 }

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Genre;
+use App\Models\Comic;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
@@ -37,7 +39,7 @@ class UserController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('profile-edit', compact('user')); // Kita akan buat view ini
+        return view('user.profile-edit', compact('user'));
     }
 
     public function update(Request $request)
@@ -46,21 +48,32 @@ class UserController extends Controller
 
         // 1. Validasi Data
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20', // Asumsi kolom phone ada
-            'address' => 'nullable|string|max:255', // Asumsi kolom address ada
-            'password' => 'nullable|string|min:8|confirmed', // Password baru opsional
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'bio' => 'nullable|string|max:500',
+            'birth_date' => 'nullable|date|before:today',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // 2. Update Data
-        $user->name = $request->input('nama'); // Asumsi input form menggunakan name="nama"
-        $user->phone = $request->input('phone');
-        $user->address = $request->input('address');
+        // 3. Update Data
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->bio = $request->input('bio');
+        $user->birth_date = $request->input('birth_date');
 
-        // 3. Update Password jika diisi
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->input('password'));
+        // 4. Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar && file_exists(public_path($user->avatar))) {
+                unlink(public_path($user->avatar));
+            }
+
+            // Store new avatar
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = 'storage/' . $avatarPath;
         }
+
+
 
         $user->save();
 
@@ -89,6 +102,41 @@ class UserController extends Controller
         return $initials;
     }
 
+    public function dashboard()
+    {
+        $genres = Genre::all();
+
+        try {
+            // Fetch top comics by rating
+            $topComics = Comic::published()
+                ->with(['user', 'ratings'])
+                ->orderByRaw('COALESCE((SELECT AVG(rating) FROM ratings WHERE ratings.comic_id = comic.id), 0) DESC')
+                ->limit(10)
+                ->get();
+
+            // Fetch new released comics
+            $newReleasedComics = Comic::published()
+                ->with(['user', 'ratings'])
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get();
+
+            // Fetch random comics for "For You"
+            $forYouComics = Comic::published()
+                ->with(['user', 'ratings'])
+                ->inRandomOrder()
+                ->limit(10)
+                ->get();
+        } catch (\Exception $e) {
+            // If there's an error with the queries, return empty collections
+            $topComics = collect();
+            $newReleasedComics = collect();
+            $forYouComics = collect();
+        }
+
+        return view('user.dashboard', compact('genres', 'topComics', 'newReleasedComics', 'forYouComics'));
+    }
+
     public function showProfile()
     {
         $user = Auth::user();
@@ -98,12 +146,37 @@ class UserController extends Controller
         }
         $initials = $this->getInitials($user->name);
 
-        return view('profile', compact('user', 'initials'));
+        return view('user.profil', compact('user', 'initials'));
     }
 
     public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus!');
+    }
+
+    public function ranking()
+    {
+        return view('user.ranking');
+    }
+
+    public function following()
+    {
+        $user = Auth::user();
+        $followedComics = $user->followedComics()->with(['genres', 'user'])->get();
+
+        return view('user.user-menu.user-following', compact('followedComics'));
+    }
+
+    public function becomeCreator(Request $request)
+    {
+        $user = Auth::user();
+
+        // Update role to creator
+        $user->role = 'creator';
+        $user->save();
+
+        // Redirect to creator onboarding
+        return redirect()->route('creator.onboarding')->with('success', 'Selamat! Anda sekarang menjadi creator.');
     }
 }

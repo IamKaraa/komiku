@@ -12,7 +12,7 @@
 
 <body>
   <div class="otp-box">
-    <form class="form-glass" method="POST" action="{{ route('otp.verify') }}">
+    <form class="form-glass" method="POST" action="/otp/verify">
       @csrf
       <input type="hidden" name="user_id" value="{{ $user ? $user->id : old('user_id') }}">
       <span class="close-btn" onclick="window.history.back()">&times;</span>

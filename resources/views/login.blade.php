@@ -8,14 +8,39 @@
   <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
   @vite(['resources/css/login.css'])
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
 
+  <style>
+    /* Notifikasi popup */
+.notif {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f44336; /* merah */
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+  z-index: 9999;
+}
+.notif.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+  </style>
+</head>
 <body>
   <div class="login-box">
-    <form class="form-glass" id="loginForm" method="POST" action="{{ route('login') }}">
+    <form class="form-glass" id="loginForm" method="POST" action="{{ route('login.post') }}">
       @csrf
       <span class="close-btn" id="closeBtn">&times;</span>
       <h2>Login</h2>
+
+      <!-- Notifikasi -->
+      <div id="notif" class="notif"></div>
+
 
       <div class="input-group">
         <label>
@@ -74,10 +99,25 @@
     closeBtn.addEventListener("click", () => {
       window.history.back();
     });
-    
-    // Perbaikan: Validasi password harus dilakukan di backend.
-    // Kode JavaScript yang sebelumnya sudah dihapus untuk menghindari duplikasi validasi.
+
+  // Fungsi tampilkan notifikasi
+  function showNotification(message) {
+    const notif = document.getElementById('notif');
+    notif.textContent = message;
+    notif.classList.add('show');
+    setTimeout(() => {
+      notif.classList.remove('show');
+    }, 3000); // tampil 3 detik
+  }
+
+  // Cek apakah ada flash message dari Laravel
+  @if(session('error'))
+    showNotification("{{ session('error') }}");
+  @endif
+
   </script>
+
+  
 </body>
 
 </html>
