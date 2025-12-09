@@ -1,0 +1,209 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(to right top,
+        #1a2a3c,
+        #263d54,
+        #32526b,
+        #3e6782,
+        #4a7b9a); /* Background gradien yang sama dengan register */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.otp-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.form-glass {
+    background: rgba(255, 255, 255, 0.1); /* Background transparan */
+    backdrop-filter: blur(20px); /* Efek blur glassmorphism */
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 400px; /* Lebar maksimal sama */
+    color: #fff;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Teks di tengah seperti gambar */
+}
+
+.form-glass h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #fff; /* Pastikan teks putih */
+}
+
+.form-glass p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.form-glass p.email-display {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #fff;
+    margin-bottom: 25px; /* Beri jarak antara email dan label OTP */
+}
+
+.form-glass .close-btn {
+    position: absolute;
+    top: 15px; /* Sesuaikan jarak dari atas */
+    right: 15px; /* Sesuaikan jarak dari kanan */
+    font-size: 24px;
+    cursor: pointer;
+    color: white; /* Konsisten dengan Register/Login */
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.alert-success {
+    color: #d4edda; /* Warna teks disesuaikan untuk background gelap */
+    background-color: rgba(40, 167, 69, 0.2); /* Transparan */
+    border: 1px solid rgba(40, 167, 69, 0.5);
+}
+
+.alert-error {
+    color: #f8d7da; /* Warna teks disesuaikan untuk background gelap */
+    background-color: rgba(220, 53, 69, 0.2); /* Transparan */
+    border: 1px solid rgba(220, 53, 69, 0.5);
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex; /* Untuk menempatkan label dan input */
+    justify-content: center; /* Untuk menengahkan input */
+}
+
+.input-group-otp {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column; /* Susun vertikal: Label di atas, Input di bawah */
+    align-items: center;
+}
+
+.input-group-otp .otp-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 5px; /* Jarak antara label dan input */
+    align-self: center; /* Pastikan label berada di tengah */
+}
+
+.input-group-otp input[type="text"] {
+    /* Gaya Dasar Konsisten dengan Register */
+    width: 100%; /* Membuat input lebar penuh */
+    max-width: 300px; /* Lebar maksimal yang ideal di dalam form glass */
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: white; 
+    outline: none;
+    transition: border-color 0.3s ease;
+    
+    /* Gaya Unik untuk Kode OTP */
+    font-size: 1.5em; 
+    text-align: center; /* Teks tetap di tengah */
+    letter-spacing: 5px; /* Jarak antar angka */
+    font-weight: bold; 
+    
+    /* Hapus max-width lama */
+    margin: 0; /* Hapus margin agar penempatan di tengah (align-items: center) bekerja */
+}
+
+.input-group-otp input[type="text"]:focus {
+    border-color: #007bff;
+}
+
+.input-group label {
+    display: block;
+    margin-top: 25px;
+    font-weight: 600;
+    color: #fff;
+    font-size: 15px;
+}
+
+.input-group input[type="text"] {
+    background: rgba(255, 255, 255, 0.1); /* Background transparan */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    max-width: 250px; /* Lebar yang sama dengan gambar */
+    font-size: 1.5em;
+    text-align: center;
+    letter-spacing: 5px; /* Sesuaikan jarak antar angka */
+    font-weight: bold;
+    color: white; /* Warna teks input putih */
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input[type="text"]:focus {
+    border-color: #007bff; /* Warna border saat focus */
+}
+
+.otp-btn {
+    width: 100%;
+    padding: 12px;
+    background: #0f172a; /* Warna tombol yang sama dengan register */
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.otp-btn:hover {
+    background: #1e293b;
+}
+
+.resend-text {
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.resend-text a {
+    color: #ffffff; /* Warna link biru */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.resend-text a:hover {
+    color: #ffffff;
+}
+
+/* Style untuk Cooldown */
+.resend-link-disabled {
+    color: #999 !important;
+    pointer-events: none;
+    cursor: default;
+}
+.cooldown-timer {
+    display:inline; 
+    color:#ff6600; 
+    font-weight: bold;
+}

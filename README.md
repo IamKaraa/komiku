@@ -1,61 +1,149 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+# Komiku — Platform Webcomic Interaktif
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Komiku** adalah platform webcomic berbasis Laravel yang dirancang untuk memberikan pengalaman membaca komik digital yang nyaman sekaligus menjadi wadah terstruktur bagi kreator lokal untuk mengunggah dan mempublikasikan karya mereka. Fokus: aksesibilitas pembaca, manajemen konten kreator, dan dashboard admin untuk kurasi serta analitik ringan. 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+![WhatsApp Image 2025-12-09 at 14 01 41_1bb7f5e8](https://github.com/user-attachments/assets/6c95545d-bcdb-4a16-8c1d-782fa2bd3372)
+![WhatsApp Image 2025-12-09 at 14 01 20_8eedf819](https://github.com/user-attachments/assets/4f1bbf25-8630-4d69-90b8-3334e75c08f4)
+![WhatsApp Image 2025-12-09 at 14 10 51_108aff39](https://github.com/user-attachments/assets/9c5d8d1f-2230-47b2-ae3c-655909270190)
+![WhatsApp Image 2025-12-09 at 14 20 02_1adeaccc](https://github.com/user-attachments/assets/e634fc38-d33f-4c80-9044-14a53a0bbae1)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Fitur Utama
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+* Halaman baca komik responsif (reader)
+* Studio kreator: unggah komik, buat episode, kelola konten
+* Dashboard admin: review/approve komik, kelola data master (users, genres)
+* Sistem rekomendasi dasar (berbasis usia & genre favorit)
+* Sistem komentar, rating, dan kontrol usia untuk konten dewasa
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Teknologi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+* Framework: **Laravel 12**. 
+* Bahasa: **PHP >= 8.3**. 
+* Database: **PostgreSQL** (utama). 
+* Templating: **Blade**
+* Storage: **Laravel Storage** (gambar cover & halaman)
+* Autentikasi (web): Laravel auth (email verification, hashed password)
+* Note: API internal pada laporan menyebut penggunaan JWT — namun dokumentasi endpoint tidak disertakan di sini. 
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Struktur Repository (disarankan)
 
-## Contributing
+```
+/app
+  /Http
+  /Models
+/config
+/database
+  /migrations
+  /seeders
+/public
+/resources
+  /views
+  /css
+  /js
+/routes
+  web.php
+  api.php  <-- (boleh ada, tapi dokumentasinya tidak termasuk di README)
+.env.example
+README.md
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Persiapan (Instalasi Lokal)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Berikut merupakan langkah langkah menjalankan project Komiku :
 
-## Security Vulnerabilities
+1. Clone repo
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```bash
+   git clone https://github.com/IamKaraa/komiku.git
+   cd komiku
+   ```
 
-## License
+2. Install dependency PHP
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   ```bash
+   composer install
+   ```
+
+3. Salin file environment dan sesuaikan
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` (contoh pengaturan penting):
+
+   ```
+   APP_NAME=Komiku
+   APP_ENV=local
+   APP_KEY= (jalankan php artisan key:generate)
+   DB_CONNECTION=pgsql
+   DB_HOST=127.0.0.1
+   DB_PORT=5432
+   DB_DATABASE=komiku_db
+   DB_USERNAME=komiku_user
+   DB_PASSWORD=secret
+   FILESYSTEM_DRIVER=public
+   ```
+
+4. Buat key aplikasi
+
+   ```bash
+   php artisan key:generate
+   ```
+
+5. Migrasi dan seeder (jika tersedia)
+
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
+
+6. Jalankan storage link (untuk akses file gambar)
+
+   ```bash
+   php artisan storage:link
+   ```
+
+7. Jalankan server lokal
+
+   ```bash
+   php artisan serve
+   ```
+
+   Akses: `http://127.0.0.1:8000`
+
+---
+
+## Database — Tabel Utama (ringkasan)
+
+Project Komiku memakai beberapa tabel inti; migrasi tersedia di folder `database/migrations`:
+
+* `users` (role: reader, creator, admin; email_verified_at; status aktif/nonaktif)
+* `genres`
+* `comics` (judul, deskripsi, thumbnail, status_approval)
+* `comic_genre` (pivot)
+* `chapters`
+* `chapter_images` (halaman/gambar per chapter)
+* `ratings`, `comments`, `favorite_genres` 
+
+---
+
+## Peran Pengguna & Otorisasi
+
+* **Admin**: manage genre, user, approve/decline komik, lihat statistik.
+* **Creator**: upload komik, buat/edit/delete chapter, submit untuk review.
+* **User/Pembaca**: membaca komik, pilih genre favorit.
+  Akses dibatasi melalui middleware role-based (`auth`, `isAdmin`, `isCreator`). 
+
+---
