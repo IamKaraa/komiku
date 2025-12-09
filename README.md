@@ -143,7 +143,7 @@ Project Komiku memakai beberapa tabel inti; migrasi tersedia di folder `database
 
 * **Admin**: manage genre, user, approve/decline komik, lihat statistik.
 * **Creator**: upload komik, buat/edit/delete chapter, submit untuk review.
-* **User/Pembaca**: membaca komik, beri rating & komentar, pilih genre favorit.
+* **User/Pembaca**: membaca komik, pilih genre favorit.
   Akses dibatasi melalui middleware role-based (`auth`, `isAdmin`, `isCreator`). 
 
 ---
