@@ -60,7 +60,7 @@ README.md
 
 ## Persiapan (Instalasi Lokal)
 
-Ikuti langkah-langkah berikut untuk menjalankan proyek di lingkungan pengembangan (assumes composer & php & postgres terpasang).
+Berikut merupakan langkah langkah menjalankan project Komiku :
 
 1. Clone repo
 
@@ -127,7 +127,7 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek di lingkungan pengembanga
 
 ## Database — Tabel Utama (ringkasan)
 
-Proyek memakai beberapa tabel inti; migrasi tersedia di folder `database/migrations`:
+Project Komiku memakai beberapa tabel inti; migrasi tersedia di folder `database/migrations`:
 
 * `users` (role: reader, creator, admin; email_verified_at; status aktif/nonaktif)
 * `genres`
@@ -147,11 +147,3 @@ Proyek memakai beberapa tabel inti; migrasi tersedia di folder `database/migrati
   Akses dibatasi melalui middleware role-based (`auth`, `isAdmin`, `isCreator`). 
 
 ---
----
-
----
-
-
-
-
-
