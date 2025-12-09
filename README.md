@@ -1,6 +1,4 @@
-Berikut **README.md** siap-pakai untuk repository GitHub proyek **Komiku**. Saya sengaja **tidak menyertakan bagian API/internal** sesuai permintaanmu — README fokus pada overview, instalasi, arsitektur, dan penggunaan lokal (tanpa dokumentasi endpoint). Saya juga menyertakan referensi singkat ke laporan proyek sebagai sumber deskripsi dan teknologi. Salin-tempel isi berikut ke file `README.md` di repo-mu, lalu sesuaikan bagian `ENV` atau nama database bila perlu.
 
----
 
 # Komiku — Platform Webcomic Interaktif
 
