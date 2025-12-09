@@ -22,8 +22,6 @@ Berikut **README.md** siap-pakai untuk repository GitHub proyek **Komiku**. Saya
 * Sistem rekomendasi dasar (berbasis usia & genre favorit)
 * Sistem komentar, rating, dan kontrol usia untuk konten dewasa
 
-> Catatan: Dokumentasi endpoint API **tidak disertakan** di README ini sesuai instruksi. Untuk integrasi mobile/third-party, proyek menggunakan JWT pada lapisan API (tercantum dalam laporan proyek). 
-
 ---
 
 ## Teknologi
